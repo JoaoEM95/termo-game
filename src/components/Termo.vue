@@ -16,6 +16,7 @@
           :indexa="chances"
           :atualRound="atualRound"
           :testeWord="testWords[n - 1]"
+          :numberTerm="n"
           @confirmSelection="confirm = false"
         />
       </div>

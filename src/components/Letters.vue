@@ -1,13 +1,12 @@
 <template>
   <div class="flexColumn">
-    <div>
-    </div>
+    <div></div>
     <input
       type="text"
       maxlength="1"
       v-model="firstLetter"
       :style="{ backgroundColor: localConfirm ? getColor(firstLetter, 0) : '' }"
-      :disabled="indexa !== atualRound"
+      :disabled="indexa !== atualRound || youWin"
     />
     <input
       type="text"
@@ -16,14 +15,14 @@
       :style="{
         backgroundColor: localConfirm ? getColor(secondLetter, 1) : '',
       }"
-      :disabled="indexa !== atualRound"
+      :disabled="indexa !== atualRound || youWin"
     />
     <input
       type="text"
       maxlength="1"
       v-model="thirdLetter"
       :style="{ backgroundColor: localConfirm ? getColor(thirdLetter, 2) : '' }"
-      :disabled="indexa !== atualRound"
+      :disabled="indexa !== atualRound || youWin"
     />
     <input
       type="text"
@@ -32,14 +31,14 @@
       :style="{
         backgroundColor: localConfirm ? getColor(fourthLetter, 3) : '',
       }"
-      :disabled="indexa !== atualRound"
+      :disabled="indexa !== atualRound || youWin"
     />
     <input
       type="text"
       maxlength="1"
       v-model="fifthLetter"
       :style="{ backgroundColor: localConfirm ? getColor(fifthLetter, 4) : '' }"
-      :disabled="indexa !== atualRound"
+      :disabled="indexa !== atualRound || youWin"
     />
   </div>
 </template>
@@ -51,7 +50,8 @@ export default {
     confirm: { type: Boolean, default: false },
     indexa: { type: Number, default: 0 },
     atualRound: { type: Number, default: 0 },
-    testeWord:''
+    testeWord: String,
+    numberTerm: Number,
   },
   data() {
     return {
@@ -62,19 +62,24 @@ export default {
       fourthLetter: "",
       fifthLetter: "",
       localConfirm: false,
-      index: undefined,
+      youWin: false,
     };
   },
   computed: {
-    ...mapGetters(["word"]),
+    ...mapGetters(["word", "winners"]),
   },
   watch: {
     confirm() {
-      if (this.confirm && this.indexa == this.atualRound) {
-        this.localConfirm = true;
-        this.confirmSelection();
-        this.addWord();
-        this.compareWord();
+      let verifyWinner = this.winners.indexOf(this.numberTerm);
+      if (verifyWinner == -1) {
+        if (this.confirm && this.indexa == this.atualRound) {
+          this.localConfirm = true;
+          this.confirmSelection();
+          this.addWord();
+          this.compareWord();
+        }
+      }else {
+        this.youWin=true;
       }
     },
   },
@@ -88,6 +93,7 @@ export default {
         this.fifthLetter;
       this.typedWord.push(atualWord);
       if (atualWord == this.testeWord) {
+        this.$store.dispatch("addWinner", this.numberTerm);
         setTimeout(() => {
           alert("Acertou, parabens!");
         }, 1000);
@@ -132,10 +138,8 @@ export default {
       }, 500);
     },
     compareWord() {
-      if (this.indexa == this.atualRound) {
+      if (this.indexa == this.atualRound && !this.youWin) {
         setTimeout(() => {
-          console.log("teste2");
-          console.log(this.word);
           this.firstLetter = this.word[0];
           this.secondLetter = this.word[1];
           this.thirdLetter = this.word[2];
@@ -156,15 +160,14 @@ input {
   text-align: center;
   border-radius: 10px;
   margin-right: 5px;
-  background-color:darkgray;
+  background-color: darkgray;
   border-style: solid;
   border-width: 5px;
   border-color: #312a2c;
 }
-.flexColumn{
+.flexColumn {
   display: flex;
   flex-direction: row;
   margin: 5px;
 }
-
 </style>
