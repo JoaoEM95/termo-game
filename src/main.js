@@ -5,8 +5,13 @@ import App from './App.vue'
 
 const store = createStore({
     state: {
-        _word: 'TESTE',
-        _winners: []
+        _word: '',
+        _winners: [],
+        _firstLetter: "",
+        _secondLetter: "",
+        _thirdLetter: "",
+        _fourthLetter: "",
+        _fifthLetter: "",
     },
     getters: {
         word(state) {
@@ -17,21 +22,36 @@ const store = createStore({
         }
     },
     mutations: {
-        setWord(state, data) {
-            state._word = data;
+        setWord(state) {
+            state._word = state._firstLetter +
+                state._secondLetter +
+                state._thirdLetter +
+                state._fourthLetter +
+                state._fifthLetter;
         },
         setWinner(state, data) {
             state._winners.push(data);
         },
+        reset(state) {
+            state._firstLetter = "";
+            state._secondLetter = "";
+            state._thirdLetter = "";
+            state._fourthLetter = "";
+            state._fifthLetter = "";
+        }
 
     },
     actions: {
-        addWord({ commit }, data) {
-            commit('setWord', data)
+        addWord({ commit }) {
+
+            commit('setWord')
         },
         addWinner({ commit }, data) {
             commit('setWinner', data)
 
+        },
+        resetLetters({ commit }) {
+            commit("reset")
         }
     }
 })

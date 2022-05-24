@@ -52,7 +52,7 @@ export default {
     handleConfirm() {
       setTimeout(() => {
         this.atualRound = this.atualRound + 1;
-      }, 1000);
+      }, 10);
       this.confirm = true;
     },
     game(name,chances,terms) {
