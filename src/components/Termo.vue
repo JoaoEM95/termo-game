@@ -40,7 +40,7 @@ export default {
       confirm: false,
       maxChances: 6,
       atualRound: 1,
-      testWords: ["QUERO", "MUITO", "TEISA", "TEAMO","LINDA"],
+      testWords: ["PODER", "MORAL", "BOLSO", "TEAMO","LINDA"],
       jogo: "TERMO",
       numberOfTerms: 1,
     };

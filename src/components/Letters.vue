@@ -1,5 +1,6 @@
 <template>
   <div class="flexColumn">
+    <div>{{ winners }}</div>
     <div></div>
     <input
       type="text"
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapGetters } from "vuex";
 export default {
   props: {
     confirm: { type: Boolean, default: false },
@@ -73,31 +74,25 @@ export default {
       let verifyWinner = this.winners.indexOf(this.numberTerm);
       if (verifyWinner == -1) {
         if (this.confirm && this.indexa == this.atualRound) {
+          console.log(this.numberTerm);
           this.localConfirm = true;
-          this.confirmSelection();
           this.addWord();
           this.compareWord();
+          this.confirmSelection();
         }
-      }else {
-        this.youWin=true;
+      } else {
+        this.youWin = true;
       }
     },
   },
   methods: {
     confirmSelection() {
-      const atualWord =
-        this.firstLetter +
-        this.secondLetter +
-        this.thirdLetter +
-        this.fourthLetter +
-        this.fifthLetter;
-      this.typedWord.push(atualWord);
-      if (atualWord == this.testeWord) {
-        this.$store.dispatch("addWinner", this.numberTerm);
-        setTimeout(() => {
-          alert("Acertou, parabens!");
-        }, 1000);
-      }
+      setTimeout(() => {
+        if (this.word == this.testeWord) {
+          this.$store.dispatch("addWinner", this.numberTerm);
+        }
+      }, 10);
+
       setTimeout(() => {
         this.$emit("confirmSelection");
       }, 1000);
@@ -118,24 +113,22 @@ export default {
       let color = "gray";
       let letters = this.testeWord.split("");
       if (letter == this.testeWord[position]) {
-        color = "green";
+        color = "#43CD80";
       } else if (letters.indexOf(letter) !== -1) {
         color = "yellow";
       }
       return color;
     },
     addWord() {
-      setTimeout(() => {
-        if (this.indexa == this.atualRound && this.firstLetter.length) {
-          const atualWord =
-            this.firstLetter +
-            this.secondLetter +
-            this.thirdLetter +
-            this.fourthLetter +
-            this.fifthLetter;
-          this.$store.dispatch("addWord", atualWord);
-        }
-      }, 500);
+      if (this.indexa == this.atualRound && this.firstLetter.length) {
+        const atualWord =
+          this.firstLetter +
+          this.secondLetter +
+          this.thirdLetter +
+          this.fourthLetter +
+          this.fifthLetter;
+        this.$store.dispatch("addWord", atualWord);
+      }
     },
     compareWord() {
       if (this.indexa == this.atualRound && !this.youWin) {
@@ -145,7 +138,7 @@ export default {
           this.thirdLetter = this.word[2];
           this.fourthLetter = this.word[3];
           this.fifthLetter = this.word[4];
-        }, 700);
+        }, 1);
       }
     },
   },
