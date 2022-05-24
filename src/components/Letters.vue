@@ -1,6 +1,5 @@
 <template>
   <div class="flexColumn">
-    <div>{{ winners }}</div>
     <div></div>
     <input
       type="text"
